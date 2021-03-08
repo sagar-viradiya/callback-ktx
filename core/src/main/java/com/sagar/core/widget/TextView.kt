@@ -9,23 +9,26 @@ import kotlinx.coroutines.flow.callbackFlow
 
 sealed class ChangeDetails {
     data class BeforeChangeDetails(
-        val s: CharSequence?, val start: Int, val count: Int, val after: Int
-    ): ChangeDetails()
+        val s: CharSequence?,
+        val start: Int,
+        val count: Int,
+        val after: Int
+    ) : ChangeDetails()
     data class OnChangeDetails(
-        val s: CharSequence?, val start: Int, val count: Int, val before: Int
-    ): ChangeDetails()
-    data class AfterChangeDetails(val editable: Editable?): ChangeDetails()
+        val s: CharSequence?,
+        val start: Int,
+        val count: Int,
+        val before: Int
+    ) : ChangeDetails()
+    data class AfterChangeDetails(val editable: Editable?) : ChangeDetails()
 }
 
 @ExperimentalCoroutinesApi
 suspend fun TextView.afterTextChangeFlow() = callbackFlow<ChangeDetails.AfterChangeDetails?> {
-    //Callback
     val textWatcher = getTextWatcher {
         offer(ChangeDetails.AfterChangeDetails(it))
     }
-
     addTextChangedListener(textWatcher)
-
     awaitClose {
         removeTextChangedListener(textWatcher)
     }
@@ -33,13 +36,12 @@ suspend fun TextView.afterTextChangeFlow() = callbackFlow<ChangeDetails.AfterCha
 
 @ExperimentalCoroutinesApi
 suspend fun TextView.beforeTextChangeFlow() = callbackFlow<ChangeDetails.BeforeChangeDetails> {
-
-    val textWatcher = getTextWatcher(beforeTextChanged = { s, start, count, after ->
-        offer(ChangeDetails.BeforeChangeDetails(s, start, count, after))
-    })
-
+    val textWatcher = getTextWatcher(
+        beforeTextChanged = { s, start, count, after ->
+            offer(ChangeDetails.BeforeChangeDetails(s, start, count, after))
+        }
+    )
     addTextChangedListener(textWatcher)
-
     awaitClose {
         removeTextChangedListener(textWatcher)
     }
@@ -47,13 +49,12 @@ suspend fun TextView.beforeTextChangeFlow() = callbackFlow<ChangeDetails.BeforeC
 
 @ExperimentalCoroutinesApi
 suspend fun TextView.onTextChangeFlow() = callbackFlow<ChangeDetails.OnChangeDetails> {
-
-    val textWatcher = getTextWatcher(onTextChange = { s, start, before, count ->
-        offer(ChangeDetails.OnChangeDetails(s, start, count, before))
-    })
-
+    val textWatcher = getTextWatcher(
+        onTextChange = { s, start, before, count ->
+            offer(ChangeDetails.OnChangeDetails(s, start, count, before))
+        }
+    )
     addTextChangedListener(textWatcher)
-
     awaitClose {
         removeTextChangedListener(textWatcher)
     }
@@ -61,7 +62,6 @@ suspend fun TextView.onTextChangeFlow() = callbackFlow<ChangeDetails.OnChangeDet
 
 @ExperimentalCoroutinesApi
 suspend fun TextView.textChangeFlow() = callbackFlow<ChangeDetails> {
-
     val textWatcher = getTextWatcher(
         onTextChange = { s, start, before, count ->
             offer(ChangeDetails.OnChangeDetails(s, start, count, before))
@@ -73,9 +73,7 @@ suspend fun TextView.textChangeFlow() = callbackFlow<ChangeDetails> {
             offer(ChangeDetails.AfterChangeDetails(it))
         }
     )
-
     addTextChangedListener(textWatcher)
-
     awaitClose {
         removeTextChangedListener(textWatcher)
     }
