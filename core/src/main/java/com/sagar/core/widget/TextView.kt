@@ -24,7 +24,7 @@ sealed class ChangeDetails {
 }
 
 @ExperimentalCoroutinesApi
-suspend fun TextView.afterTextChangeFlow() = callbackFlow<ChangeDetails.AfterChangeDetails?> {
+suspend fun TextView.afterTextChangeFlow() = callbackFlow<ChangeDetails.AfterChangeDetails> {
     val textWatcher = getTextWatcher {
         offer(ChangeDetails.AfterChangeDetails(it))
     }
@@ -41,6 +41,7 @@ suspend fun TextView.beforeTextChangeFlow() = callbackFlow<ChangeDetails.BeforeC
             offer(ChangeDetails.BeforeChangeDetails(s, start, count, after))
         }
     )
+
     addTextChangedListener(textWatcher)
     awaitClose {
         removeTextChangedListener(textWatcher)
@@ -93,16 +94,18 @@ private inline fun getTextWatcher(
         count: Int
     ) -> Unit = { _, _, _, _ -> },
     crossinline afterTextChanged: (text: Editable?) -> Unit = {}
-) = object : TextWatcher {
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        beforeTextChanged.invoke(s, start, count, after)
-    }
+): TextWatcher {
+    return object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            beforeTextChanged.invoke(s, start, count, after)
+        }
 
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        onTextChange.invoke(s, start, before, count)
-    }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            onTextChange.invoke(s, start, before, count)
+        }
 
-    override fun afterTextChanged(s: Editable?) {
-        afterTextChanged.invoke(s)
+        override fun afterTextChanged(s: Editable?) {
+            afterTextChanged.invoke(s)
+        }
     }
 }
