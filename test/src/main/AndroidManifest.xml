@@ -3,9 +3,7 @@
     package="com.sagar.test">
 
     <application>
-        <activity android:name=".TestActivity"
-            android:theme="@style/Theme.AppCompat.Light">
-        </activity>
+        <activity android:name=".TestActivity" />
     </application>
 
 </manifest>
