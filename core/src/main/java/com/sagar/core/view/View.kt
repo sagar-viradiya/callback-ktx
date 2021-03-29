@@ -1,5 +1,6 @@
 package com.sagar.core.view
 
+import android.os.Build
 import android.view.View
 import android.view.ViewTreeObserver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -65,5 +66,69 @@ suspend fun View.awaitGlobalLayout() = suspendCancellableCoroutine<Unit> { cont 
 
     cont.invokeOnCancellation {
         viewTreeObserver.removeOnGlobalLayoutListener(listener)
+    }
+}
+
+@ExperimentalCoroutinesApi
+suspend fun View.awaitDoOnNextLayout() = suspendCancellableCoroutine<View> { cont ->
+    val listener = object : View.OnLayoutChangeListener {
+        override fun onLayoutChange(
+            view: View,
+            left: Int,
+            top: Int,
+            right: Int,
+            bottom: Int,
+            oldLeft: Int,
+            oldTop: Int,
+            oldRight: Int,
+            oldBottom: Int
+        ) {
+            view.removeOnLayoutChangeListener(this)
+            cont.resume(view) {
+                // Do nothing
+            }
+        }
+    }
+
+    addOnLayoutChangeListener(listener)
+
+    cont.invokeOnCancellation {
+        removeOnLayoutChangeListener(listener)
+    }
+}
+
+@ExperimentalCoroutinesApi
+suspend fun View.awaitDoOnLayout() = suspendCancellableCoroutine<View> { cont ->
+    val isLaidOut = if (Build.VERSION.SDK_INT >= 19) isLaidOut else width > 0 && height > 0
+
+    if (isLaidOut && !isLayoutRequested) {
+        cont.resume(this) {
+            // Do nothing
+        }
+    } else {
+        val listener = object : View.OnLayoutChangeListener {
+            override fun onLayoutChange(
+                view: View,
+                left: Int,
+                top: Int,
+                right: Int,
+                bottom: Int,
+                oldLeft: Int,
+                oldTop: Int,
+                oldRight: Int,
+                oldBottom: Int
+            ) {
+                view.removeOnLayoutChangeListener(this)
+                cont.resume(view) {
+                    // Do nothing
+                }
+            }
+        }
+
+        addOnLayoutChangeListener(listener)
+
+        cont.invokeOnCancellation {
+            removeOnLayoutChangeListener(listener)
+        }
     }
 }
