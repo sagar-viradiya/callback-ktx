@@ -3,11 +3,9 @@ package com.sagar.core.view
 import android.os.Build
 import android.view.View
 import android.view.ViewTreeObserver
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-@ExperimentalCoroutinesApi
 suspend fun View.awaitPost() = suspendCancellableCoroutine<Boolean> { cont ->
 
     val runnable = Runnable { cont.resume(true) }
@@ -21,7 +19,6 @@ suspend fun View.awaitPost() = suspendCancellableCoroutine<Boolean> { cont ->
     }
 }
 
-@ExperimentalCoroutinesApi
 suspend fun View.awaitPostDelay(delay: Long) = suspendCancellableCoroutine<Boolean> { cont ->
 
     val runnable = Runnable { cont.resume(true) }
@@ -35,7 +32,6 @@ suspend fun View.awaitPostDelay(delay: Long) = suspendCancellableCoroutine<Boole
     }
 }
 
-@ExperimentalCoroutinesApi
 suspend fun View.awaitGlobalLayout() = suspendCancellableCoroutine<Unit> { cont ->
 
     val listener = object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -52,7 +48,6 @@ suspend fun View.awaitGlobalLayout() = suspendCancellableCoroutine<Unit> { cont 
     }
 }
 
-@ExperimentalCoroutinesApi
 suspend fun View.awaitDoOnNextLayout() = suspendCancellableCoroutine<View> { cont ->
     val listener = object : View.OnLayoutChangeListener {
         override fun onLayoutChange(
@@ -76,7 +71,6 @@ suspend fun View.awaitDoOnNextLayout() = suspendCancellableCoroutine<View> { con
     }
 }
 
-@ExperimentalCoroutinesApi
 suspend fun View.awaitDoOnLayout(): View {
     val isLaidOut = if (Build.VERSION.SDK_INT >= 19) isLaidOut else width > 0 && height > 0
     return if (isLaidOut && !isLayoutRequested) {
