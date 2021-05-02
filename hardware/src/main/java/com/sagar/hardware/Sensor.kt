@@ -10,16 +10,15 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.callbackFlow
 
 sealed class SensorState {
-    data class SensorEvent(val sensorEvent: android.hardware.SensorEvent) : SensorState()
+    data class SensorData(val sensorEvent: SensorEvent) : SensorState()
     data class SensorAccuracy(val sensor: Sensor?, val accuracy: Int) : SensorState()
 }
 
 @ExperimentalCoroutinesApi
-fun SensorManager.sensorEventFlow(
+fun SensorManager.sensorStateFlow(
     sensor: Sensor,
     lifecycleOwner: LifecycleOwner,
     accuracy: Int = SensorManager.SENSOR_DELAY_NORMAL
@@ -27,11 +26,15 @@ fun SensorManager.sensorEventFlow(
 
     val sensorListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
-            offer(SensorState.SensorEvent(event))
+            if(!isClosedForSend) {
+                offer(SensorState.SensorData(event))
+            }
         }
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-            offer(SensorState.SensorAccuracy(sensor, accuracy))
+            if(!isClosedForSend) {
+                offer(SensorState.SensorAccuracy(sensor, accuracy))
+            }
         }
     }
 
@@ -61,7 +64,7 @@ fun SensorManager.sensorEventFlow(
         }
 
         @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-        fun clear() {
+        fun closeFlow() {
             close()
         }
     })

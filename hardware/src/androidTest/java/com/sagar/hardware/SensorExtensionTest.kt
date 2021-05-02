@@ -36,10 +36,10 @@ class SensorExtensionTest {
     @Test
     fun sensorEventFlowTest() = runBlocking(Dispatchers.Main.immediate) {
         val sensorState: SensorState = sensorManager
-            .sensorEventFlow(sensor, testActivity)
-            .filter { it is SensorState.SensorEvent }
+            .sensorStateFlow(sensor, testActivity)
+            .filter { it is SensorState.SensorData }
             .first()
-        Assert.assertTrue((sensorState as SensorState.SensorEvent).sensorEvent.sensor == sensor)
+        Assert.assertTrue((sensorState as SensorState.SensorData).sensorEvent.sensor == sensor)
     }
 
     @Test
@@ -48,14 +48,14 @@ class SensorExtensionTest {
         var shouldFire = false
         var flowCompleted = false
         val deferredAssertion = async(Dispatchers.Main.immediate) {
-            sensorManager.sensorEventFlow(sensor, testActivity)
-                .filter { it is SensorState.SensorEvent }
+            sensorManager.sensorStateFlow(sensor, testActivity)
+                .filter { it is SensorState.SensorData }
                 .onCompletion {
                     flowCompleted = true
                 }
                 .collect {
                     Assert.assertTrue(shouldFire)
-                    Assert.assertTrue((it as SensorState.SensorEvent).sensorEvent.sensor == sensor)
+                    Assert.assertTrue((it as SensorState.SensorData).sensorEvent.sensor == sensor)
                 }
         }
         delay(500)
@@ -73,7 +73,7 @@ class SensorExtensionTest {
     @Test
     fun sensorAccuracyFlowTest() = runBlocking(Dispatchers.Main.immediate) {
         val sensorAccuracy = sensorManager
-            .sensorEventFlow(sensor, testActivity)
+            .sensorStateFlow(sensor, testActivity)
             .filter { it is SensorState.SensorAccuracy }
             .first()
         Assert.assertTrue((sensorAccuracy as SensorState.SensorAccuracy).sensor == sensor)
