@@ -7,8 +7,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.rules.activityScenarioRule
 import com.sagar.test.TestActivity
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -26,7 +33,7 @@ class SensorExtensionTest {
     @Before
     fun before() {
         sensorManager = (ApplicationProvider.getApplicationContext() as Context)
-                            .getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            .getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
         activityRule.scenario.onActivity {
             testActivity = it
@@ -52,8 +59,7 @@ class SensorExtensionTest {
                 .filter { it is SensorState.SensorData }
                 .onCompletion {
                     flowCompleted = true
-                }
-                .collect {
+                }.collect {
                     Assert.assertTrue(shouldFire)
                     Assert.assertTrue((it as SensorState.SensorData).sensorEvent.sensor == sensor)
                 }
@@ -67,6 +73,24 @@ class SensorExtensionTest {
         shouldFire = false
         delay(500)
         deferredAssertion.cancelAndJoin()
+        Assert.assertTrue(flowCompleted)
+    }
+
+    @Test
+    fun sensorEventFlowCancelTest() = runBlocking(Dispatchers.Default) {
+        var flowCompleted = false
+        val deferredAssertion = async(Dispatchers.Main.immediate) {
+            sensorManager.sensorStateFlow(sensor, testActivity)
+                .filter { it is SensorState.SensorData }
+                .onCompletion {
+                    flowCompleted = true
+                }.collect {
+                    Assert.assertTrue((it as SensorState.SensorData).sensorEvent.sensor == sensor)
+                }
+        }
+        delay(1000)
+        activityRule.scenario.moveToState(Lifecycle.State.DESTROYED)
+        deferredAssertion.await()
         Assert.assertTrue(flowCompleted)
     }
 

@@ -26,13 +26,13 @@ fun SensorManager.sensorStateFlow(
 
     val sensorListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
-            if(!isClosedForSend) {
+            if (!isClosedForSend) {
                 offer(SensorState.SensorData(event))
             }
         }
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-            if(!isClosedForSend) {
+            if (!isClosedForSend) {
                 offer(SensorState.SensorAccuracy(sensor, accuracy))
             }
         }
@@ -43,7 +43,7 @@ fun SensorManager.sensorStateFlow(
         private var registered = false
 
         init {
-            if(lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            if (lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
                 registerListener(sensorListener, sensor, accuracy)
                 registered = true
             }
@@ -51,7 +51,7 @@ fun SensorManager.sensorStateFlow(
 
         @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
         fun registerListener() {
-            if(!registered) {
+            if (!registered) {
                 registerListener(sensorListener, sensor, accuracy)
                 registered = true
             }
