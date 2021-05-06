@@ -1,3 +1,4 @@
+include ':recyclerview'
 include ':test'
 include ':core'
 rootProject.name = "callback-ktx"

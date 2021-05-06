@@ -29,4 +29,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    dependencies {
+        implementation "androidx.recyclerview:recyclerview:1.2.0"
+    }
 }
