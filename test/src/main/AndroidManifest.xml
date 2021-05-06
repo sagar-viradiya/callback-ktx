@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sagar.test">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application>
         <activity android:name=".TestActivity" />
         <activity android:name=".RecyclerViewTestActivity" />
