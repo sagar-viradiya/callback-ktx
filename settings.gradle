@@ -1,3 +1,4 @@
+include ':hardware'
 include ':test'
 include ':core'
 rootProject.name = "callback-ktx"
