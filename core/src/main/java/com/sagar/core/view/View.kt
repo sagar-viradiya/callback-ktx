@@ -1,6 +1,7 @@
 package com.sagar.core.view
 
 import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.view.View
 import android.view.ViewTreeObserver
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -80,4 +81,94 @@ suspend fun View.awaitDoOnLayout(): View {
     } else {
         awaitDoOnNextLayout()
     }
+}
+
+suspend fun View.awaitOnAttach() = suspendCancellableCoroutine<View> { cont ->
+    var listener: View.OnAttachStateChangeListener? = null
+    val isAttachToWindow = if (SDK_INT >= 19) isAttachedToWindow else windowToken != null
+    if (isAttachToWindow) {
+        cont.resume(this)
+    } else {
+        listener = object : View.OnAttachStateChangeListener {
+            override fun onViewAttachedToWindow(view: View) {
+                removeOnAttachStateChangeListener(this)
+                cont.resume(view)
+            }
+
+            override fun onViewDetachedFromWindow(view: View) {
+                // Do nothing
+            }
+        }
+        addOnAttachStateChangeListener(listener)
+    }
+
+    cont.invokeOnCancellation {
+        listener?.let { removeOnAttachStateChangeListener(it) }
+    }
+}
+
+suspend fun View.awaitOnDetach() = suspendCancellableCoroutine<View> { cont ->
+    var listener: View.OnAttachStateChangeListener? = null
+    val isAttachToWindow = if (SDK_INT >= 19) isAttachedToWindow else windowToken != null
+    if (!isAttachToWindow) {
+        cont.resume(this)
+    } else {
+        listener = object : View.OnAttachStateChangeListener {
+            override fun onViewAttachedToWindow(view: View) {
+                // Do nothing
+            }
+
+            override fun onViewDetachedFromWindow(view: View) {
+                removeOnAttachStateChangeListener(this)
+                cont.resume(view)
+            }
+        }
+        addOnAttachStateChangeListener(listener)
+    }
+
+    cont.invokeOnCancellation {
+        listener?.let { removeOnAttachStateChangeListener(it) }
+    }
+}
+
+suspend fun View.awaitPreDraw() = suspendCancellableCoroutine<Unit> { cont ->
+    var viewTreeObserver: ViewTreeObserver = viewTreeObserver
+
+    val listener = object : ViewTreeObserver.OnPreDrawListener, View.OnAttachStateChangeListener {
+        override fun onPreDraw(): Boolean {
+            removeListener(this@awaitPreDraw, viewTreeObserver, this)
+            cont.resume(Unit)
+            return true
+        }
+
+        override fun onViewAttachedToWindow(view: View) {
+            viewTreeObserver = view.viewTreeObserver
+        }
+
+        override fun onViewDetachedFromWindow(view: View) {
+            cont.cancel()
+        }
+    }
+
+    viewTreeObserver.addOnPreDrawListener(listener)
+    addOnAttachStateChangeListener(listener)
+
+    cont.invokeOnCancellation {
+        removeListener(this, viewTreeObserver, listener)
+    }
+}
+
+private fun removeListener(
+    view: View,
+    viewTreeObserver: ViewTreeObserver,
+    listener: Any
+) {
+    if (viewTreeObserver.isAlive) {
+        viewTreeObserver.removeOnPreDrawListener(listener as ViewTreeObserver.OnPreDrawListener?)
+    } else {
+        view.viewTreeObserver.removeOnPreDrawListener(
+            listener as ViewTreeObserver.OnPreDrawListener?
+        )
+    }
+    view.removeOnAttachStateChangeListener(listener as View.OnAttachStateChangeListener?)
 }

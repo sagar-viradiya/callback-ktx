@@ -1,6 +1,7 @@
 package com.sagar.core.view
 
 import android.view.View
+import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.rules.activityScenarioRule
 import com.sagar.test.TestActivity
 import kotlinx.coroutines.Dispatchers
@@ -47,7 +48,7 @@ class ViewExtensionTest {
     }
 
     @Test
-    fun awaitDoOnNextLayout() = runBlocking(Dispatchers.Main.immediate) {
+    fun awaitDoOnNextLayoutTest() = runBlocking(Dispatchers.Main.immediate) {
         val deferredAssertions = async {
             val view = activity.demoView.awaitDoOnNextLayout()
             Assert.assertEquals(activity.demoView, view)
@@ -61,8 +62,41 @@ class ViewExtensionTest {
     }
 
     @Test
-    fun awaitDoOnLayout() = runBlocking(Dispatchers.Main.immediate) {
+    fun awaitDoOnLayoutTest() = runBlocking(Dispatchers.Main.immediate) {
         val view = activity.demoView.awaitDoOnLayout()
         Assert.assertEquals(activity.demoView, view)
+    }
+
+    @Test
+    fun awaitOnAttachTest() = runBlocking(Dispatchers.Default) {
+        activityRule.scenario.moveToState(Lifecycle.State.CREATED)
+        val deferredAssertion = async(Dispatchers.Main.immediate) {
+            val view = activity.demoView.awaitOnAttach()
+            Assert.assertTrue(activity.demoView == view)
+        }
+        activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
+        deferredAssertion.await()
+    }
+
+    @Test
+    fun awaitOnDetachTest() = runBlocking(Dispatchers.Default) {
+        val deferredAssertion = async(Dispatchers.Main.immediate) {
+            val view = activity.demoView.awaitOnDetach()
+            Assert.assertTrue(activity.demoView == view)
+        }
+        activityRule.scenario.moveToState(Lifecycle.State.DESTROYED)
+        deferredAssertion.await()
+    }
+
+    @Test
+    fun awaitOnPreDrawTest() = runBlocking(Dispatchers.Main.immediate) {
+        var count = 0
+        val deferredAssertion = async {
+            activity.demoView.awaitPreDraw()
+            count++
+        }
+        activity.demoView.viewTreeObserver.dispatchOnPreDraw()
+        deferredAssertion.await()
+        Assert.assertTrue(count == 1)
     }
 }
