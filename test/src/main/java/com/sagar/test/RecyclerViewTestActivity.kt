@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerViewTestActivity : Activity() {
-    val demoRecyclerView: RecyclerView by lazy { findViewById(R.id.dummy_text) }
+    val demoRecyclerView: RecyclerView by lazy { findViewById(R.id.recycler_view) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

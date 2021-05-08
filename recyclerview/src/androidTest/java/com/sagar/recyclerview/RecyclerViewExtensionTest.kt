@@ -11,10 +11,9 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.myapplication.Adapter
 import com.sagar.test.RecyclerViewTestActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import org.hamcrest.CoreMatchers.`is`
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,13 +45,7 @@ class RecyclerViewExtensionTest {
         activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
     }
 
-    @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.myapplication", appContext.packageName)
-    }
-
+    @ExperimentalCoroutinesApi
     @Test
     fun awaitScrollEndTest() {
         runBlocking(Dispatchers.Main.immediate) {
@@ -65,14 +58,14 @@ class RecyclerViewExtensionTest {
     }
 
 
+    @ExperimentalCoroutinesApi
     @Test
     fun awaitScrollEndFlowTest() {
         runBlocking(Dispatchers.Main.immediate) {
             val deferredAssertions = async {
-                assertTrue(recyclerView.awaitScrollEndFlow().first())
+                assertFalse(recyclerView.awaitScrollEndFlow().first())
             }
             recyclerView.layoutManager?.smoothScrollToPosition(recyclerView, null, 20)
-            recyclerView.layoutManager?.smoothScrollToPosition(recyclerView, null, 30)
             deferredAssertions.await()
 
         }
