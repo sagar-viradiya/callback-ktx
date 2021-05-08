@@ -50,7 +50,7 @@ class RecyclerViewExtensionTest {
     fun awaitScrollEndTest() {
         runBlocking(Dispatchers.Main.immediate) {
             val deferredAssertions = async {
-                assertTrue(recyclerView.awaitScrollEnd())
+                assertThat(recyclerView.awaitScrollEnd(), `is`(ScrollState.Idle))
             }
             recyclerView.layoutManager?.smoothScrollToPosition(recyclerView, null, 20)
             deferredAssertions.await()
@@ -63,7 +63,7 @@ class RecyclerViewExtensionTest {
     fun awaitScrollEndFlowTest() {
         runBlocking(Dispatchers.Main.immediate) {
             val deferredAssertions = async {
-                assertFalse(recyclerView.awaitScrollEndFlow().first())
+                assertThat(recyclerView.awaitScrollEndFlow().first(), `is`(ScrollState.Idle))
             }
             recyclerView.layoutManager?.smoothScrollToPosition(recyclerView, null, 20)
             deferredAssertions.await()
