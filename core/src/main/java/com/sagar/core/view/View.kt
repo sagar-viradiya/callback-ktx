@@ -1,63 +1,43 @@
 package com.sagar.core.view
 
+import android.os.Build
 import android.view.View
 import android.view.ViewTreeObserver
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
-@ExperimentalCoroutinesApi
 suspend fun View.awaitPost() = suspendCancellableCoroutine<Boolean> { cont ->
 
-    val runnable = object : Runnable {
-        override fun run() {
-            cont.resume(true) {
-                removeCallbacks(this)
-            }
-        }
-    }
+    val runnable = Runnable { cont.resume(true) }
 
     cont.invokeOnCancellation { removeCallbacks(runnable) }
 
     val status = post(runnable)
 
     if (!status && cont.isActive) {
-        cont.resume(false) {
-            // Do nothing
-        }
+        cont.resume(false)
     }
 }
 
-@ExperimentalCoroutinesApi
 suspend fun View.awaitPostDelay(delay: Long) = suspendCancellableCoroutine<Boolean> { cont ->
 
-    val runnable = object : Runnable {
-        override fun run() {
-            cont.resume(true) {
-                removeCallbacks(this)
-            }
-        }
-    }
+    val runnable = Runnable { cont.resume(true) }
 
     cont.invokeOnCancellation { removeCallbacks(runnable) }
 
     val status = postDelayed(runnable, delay)
 
     if (!status && cont.isActive) {
-        cont.resume(false) {
-            // Do nothing
-        }
+        cont.resume(false)
     }
 }
 
-@ExperimentalCoroutinesApi
 suspend fun View.awaitGlobalLayout() = suspendCancellableCoroutine<Unit> { cont ->
 
     val listener = object : ViewTreeObserver.OnGlobalLayoutListener {
         override fun onGlobalLayout() {
             viewTreeObserver.removeOnGlobalLayoutListener(this)
-            cont.resume(Unit) {
-                // Do nothing
-            }
+            cont.resume(Unit)
         }
     }
 
@@ -65,5 +45,39 @@ suspend fun View.awaitGlobalLayout() = suspendCancellableCoroutine<Unit> { cont 
 
     cont.invokeOnCancellation {
         viewTreeObserver.removeOnGlobalLayoutListener(listener)
+    }
+}
+
+suspend fun View.awaitDoOnNextLayout() = suspendCancellableCoroutine<View> { cont ->
+    val listener = object : View.OnLayoutChangeListener {
+        override fun onLayoutChange(
+            view: View,
+            left: Int,
+            top: Int,
+            right: Int,
+            bottom: Int,
+            oldLeft: Int,
+            oldTop: Int,
+            oldRight: Int,
+            oldBottom: Int
+        ) {
+            view.removeOnLayoutChangeListener(this)
+            cont.resume(view)
+        }
+    }
+    addOnLayoutChangeListener(listener)
+    cont.invokeOnCancellation {
+        removeOnLayoutChangeListener(listener)
+    }
+}
+
+suspend fun View.awaitDoOnLayout(): View {
+    val isLaidOut = if (Build.VERSION.SDK_INT >= 19) isLaidOut else width > 0 && height > 0
+    return if (isLaidOut && !isLayoutRequested) {
+        suspendCancellableCoroutine<View> { cont ->
+            cont.resume(this)
+        }
+    } else {
+        awaitDoOnNextLayout()
     }
 }
