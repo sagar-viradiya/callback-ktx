@@ -10,6 +10,6 @@ class TestViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     public fun loadData() {
         val title = itemView.findViewById<TextView>(R.id.dummy_text)
-        title.text = "This is the " + adapterPosition + "th view"
+        title.text = "This is the " + bindingAdapterPosition + "th view"
     }
 }
