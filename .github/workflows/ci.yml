@@ -47,7 +47,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86
-          script: ./gradlew connectedDebugAndroidTest
+          script: ./gradlew connectedDebugAndroidTest --exclude-task :location:connectedDebugAndroidTest
 
   instrumentation-tests-with-google-play-services:
     name: Instrumentation tests
