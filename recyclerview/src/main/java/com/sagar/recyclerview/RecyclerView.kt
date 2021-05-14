@@ -8,48 +8,26 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-/**
- * method that takes care of first time notifying that the recyclerview scroll has ended
- * use case may include the purpose where we do some user interaction after initial scroll
- */
-@ExperimentalCoroutinesApi
-suspend fun RecyclerView.awaitScrollEnd() =
-    suspendCancellableCoroutine<Int> { continuation ->
-        // create anonymous object for recyclerview
-        val listener = object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == SCROLL_STATE_IDLE) {
-                    // removing the listener so we don't leak the the continuation coroutine
-                    recyclerView.removeOnScrollListener(this)
-                    // Resume the coroutine once the scroll is idle
-                    continuation.resume(SCROLL_STATE_IDLE)
-                }
-            }
-        }
-        // attach scroll listener reference to recyclerview
-        addOnScrollListener(listener)
-        // remove scroll listener on coroutine cancellation
-        continuation.invokeOnCancellation { removeOnScrollListener(listener) }
-    }
-
-/**
- * Method that takes care of the use case where we want to be notified of each time the
- * recyclerview has come to a pause after scrolling - ideal for a large list and do some
- * action based on the streaming event
- */
-@ExperimentalCoroutinesApi
-suspend fun RecyclerView.awaitScrollEndFlow() = callbackFlow<Int> {
-    // create anonymous object for recyclerview
+suspend fun RecyclerView.awaitScrollEnd() = suspendCancellableCoroutine<Unit> { continuation ->
     val listener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             if (newState == SCROLL_STATE_IDLE) {
-                // emit value every time scroll is idle
-                offer(SCROLL_STATE_IDLE)
+                recyclerView.removeOnScrollListener(this)
+                continuation.resume(Unit)
             }
         }
     }
-    //attach scroll listener reference to recyclerview
     addOnScrollListener(listener)
-    // remove scroll listener on coroutine cancellation
+    continuation.invokeOnCancellation { removeOnScrollListener(listener) }
+}
+
+@ExperimentalCoroutinesApi
+fun RecyclerView.awaitStateChangeFlow() = callbackFlow<Int> {
+    val listener = object : RecyclerView.OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            offer(newState)
+        }
+    }
+    addOnScrollListener(listener)
     awaitClose { removeOnScrollListener(listener) }
 }

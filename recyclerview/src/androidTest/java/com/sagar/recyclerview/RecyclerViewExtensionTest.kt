@@ -5,20 +5,18 @@ import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import androidx.test.ext.junit.rules.activityScenarioRule
 import com.example.myapplication.TestAdapter
 import com.sagar.test.RecyclerViewTestActivity
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class RecyclerViewExtensionTest {
 
     private lateinit var recyclerView: RecyclerView
@@ -41,10 +39,8 @@ class RecyclerViewExtensionTest {
     fun awaitScrollEndTest() {
         runBlocking(Dispatchers.Main.immediate) {
             val deferredAssertions = async {
-                assertThat(
-                    recyclerView.awaitScrollEnd(),
-                    `is`(SCROLL_STATE_IDLE)
-                )
+                recyclerView.awaitScrollEnd()
+                assertThat(recyclerView.scrollState, `is`(SCROLL_STATE_IDLE))
             }
             recyclerView.layoutManager?.smoothScrollToPosition(
                 recyclerView,
@@ -60,10 +56,10 @@ class RecyclerViewExtensionTest {
     fun awaitScrollEndFlowTest() {
         runBlocking(Dispatchers.Main.immediate) {
             val deferredAssertions = async {
-                recyclerView.awaitScrollEndFlow()
+                recyclerView.awaitStateChangeFlow()
                     .take(2)
                     .collect {
-                        assertThat(it, `is`(SCROLL_STATE_IDLE))
+                        assertThat(it, `is`(recyclerView.scrollState))
                     }
             }
             recyclerView.layoutManager?.smoothScrollToPosition(
@@ -71,13 +67,6 @@ class RecyclerViewExtensionTest {
                 null,
                 20
             )
-            delay(500)
-            recyclerView.layoutManager?.smoothScrollToPosition(
-                recyclerView,
-                null,
-                30
-            )
-            delay(500)
             deferredAssertions.await()
         }
     }
