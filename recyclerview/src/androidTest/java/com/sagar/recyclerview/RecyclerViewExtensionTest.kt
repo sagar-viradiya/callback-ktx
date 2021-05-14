@@ -34,7 +34,6 @@ class RecyclerViewExtensionTest {
         }
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun awaitScrollEndTest() {
         runBlocking(Dispatchers.Main.immediate) {
