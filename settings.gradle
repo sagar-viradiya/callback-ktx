@@ -1,3 +1,4 @@
+include ':recyclerview'
 include ':hardware'
 include ':test'
 include ':core'
