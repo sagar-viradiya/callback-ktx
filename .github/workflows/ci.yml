@@ -56,7 +56,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        api-level: [25, 29]
+        api-level: [26, 30]
         target: [playstore]
     steps:
       - uses: actions/checkout@v2
