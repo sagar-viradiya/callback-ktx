@@ -1,6 +1,11 @@
 object Versions {
 
     const val GRADLE_PLUGIN = "4.2.0"
+    const val KTLINT_PLUGIN = "10.0.0"
+
+    const val MIN_SDK_VERSION = 16
+    const val TARGET_SDK_VERSION = 30
+    const val COMPILE_SDK_VERSION = 30
 
     // region Android
     const val LIFECYCLE = "2.3.1"
