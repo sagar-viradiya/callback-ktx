@@ -41,15 +41,15 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.31")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1") {
+    implementation(Libs.KOTLIN_STD)
+    implementation(Libs.COROUTINES)
+    implementation(Libs.LIFECYCLE_RUNTIME_KTX) {
         exclude("org.jetbrains.kotlinx", "kotlinx-coroutines-android")
     }
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
-    androidTestImplementation("androidx.test:core:1.3.0")
-    androidTestImplementation("androidx.test:runner:1.3.0")
-    androidTestImplementation("androidx.test:rules:1.3.0")
-    androidTestImplementation("androidx.test.ext:junit-ktx:1.1.2")
+    androidTestImplementation(Libs.COROUTINES_ANDROID)
+    androidTestImplementation(Libs.TEST_CORE)
+    androidTestImplementation(Libs.TEST_RUNNER)
+    androidTestImplementation(Libs.TEST_RULE)
+    androidTestImplementation(Libs.TEST_EXT_JUNIT_KTX)
     androidTestImplementation(project(":test"))
 }

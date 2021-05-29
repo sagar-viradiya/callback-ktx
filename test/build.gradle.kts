@@ -32,6 +32,6 @@ android {
 }
 
 dependencies {
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    implementation("androidx.recyclerview:recyclerview:1.2.0")
+    implementation(Libs.LIFECYCLE_RUNTIME_KTX)
+    implementation(Libs.RECYCLER_VIEW)
 }

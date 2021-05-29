@@ -40,13 +40,13 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.31")
-    implementation("androidx.recyclerview:recyclerview:1.2.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
-    androidTestImplementation("androidx.test:core:1.3.0")
-    androidTestImplementation("androidx.test:runner:1.3.0")
-    androidTestImplementation("androidx.test:rules:1.3.0")
-    androidTestImplementation("androidx.test.ext:junit-ktx:1.1.2")
+    implementation(Libs.KOTLIN_STD)
+    implementation(Libs.RECYCLER_VIEW)
+    implementation(Libs.COROUTINES)
+    androidTestImplementation(Libs.COROUTINES_ANDROID)
+    androidTestImplementation(Libs.TEST_CORE)
+    androidTestImplementation(Libs.TEST_RUNNER)
+    androidTestImplementation(Libs.TEST_RULE)
+    androidTestImplementation(Libs.TEST_EXT_JUNIT_KTX)
     androidTestImplementation(project(":test"))
 }
