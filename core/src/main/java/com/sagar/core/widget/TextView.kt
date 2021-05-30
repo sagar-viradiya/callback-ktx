@@ -26,7 +26,7 @@ sealed class ChangeDetails {
 @ExperimentalCoroutinesApi
 suspend fun TextView.afterTextChangeFlow() = callbackFlow<ChangeDetails.AfterChangeDetails> {
     val textWatcher = getTextWatcher {
-        offer(ChangeDetails.AfterChangeDetails(it))
+        trySend(ChangeDetails.AfterChangeDetails(it))
     }
     addTextChangedListener(textWatcher)
     awaitClose {
@@ -38,7 +38,7 @@ suspend fun TextView.afterTextChangeFlow() = callbackFlow<ChangeDetails.AfterCha
 suspend fun TextView.beforeTextChangeFlow() = callbackFlow<ChangeDetails.BeforeChangeDetails> {
     val textWatcher = getTextWatcher(
         beforeTextChanged = { s, start, count, after ->
-            offer(ChangeDetails.BeforeChangeDetails(s, start, count, after))
+            trySend(ChangeDetails.BeforeChangeDetails(s, start, count, after))
         }
     )
 
@@ -52,7 +52,7 @@ suspend fun TextView.beforeTextChangeFlow() = callbackFlow<ChangeDetails.BeforeC
 suspend fun TextView.onTextChangeFlow() = callbackFlow<ChangeDetails.OnChangeDetails> {
     val textWatcher = getTextWatcher(
         onTextChange = { s, start, before, count ->
-            offer(ChangeDetails.OnChangeDetails(s, start, count, before))
+            trySend(ChangeDetails.OnChangeDetails(s, start, count, before))
         }
     )
     addTextChangedListener(textWatcher)
@@ -65,13 +65,13 @@ suspend fun TextView.onTextChangeFlow() = callbackFlow<ChangeDetails.OnChangeDet
 suspend fun TextView.textChangeFlow() = callbackFlow<ChangeDetails> {
     val textWatcher = getTextWatcher(
         onTextChange = { s, start, before, count ->
-            offer(ChangeDetails.OnChangeDetails(s, start, count, before))
+            trySend(ChangeDetails.OnChangeDetails(s, start, count, before))
         },
         beforeTextChanged = { s, start, count, after ->
-            offer(ChangeDetails.BeforeChangeDetails(s, start, count, after))
+            trySend(ChangeDetails.BeforeChangeDetails(s, start, count, after))
         },
         afterTextChanged = {
-            offer(ChangeDetails.AfterChangeDetails(it))
+            trySend(ChangeDetails.AfterChangeDetails(it))
         }
     )
     addTextChangedListener(textWatcher)
