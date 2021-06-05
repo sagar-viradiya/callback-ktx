@@ -25,7 +25,7 @@ suspend fun RecyclerView.awaitScrollEnd() = suspendCancellableCoroutine<Unit> { 
 fun RecyclerView.awaitStateChangeFlow() = callbackFlow<Int> {
     val listener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-            offer(newState)
+            trySend(newState)
         }
     }
     addOnScrollListener(listener)

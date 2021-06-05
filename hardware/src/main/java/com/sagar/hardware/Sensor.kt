@@ -27,13 +27,13 @@ fun SensorManager.sensorStateFlow(
     val sensorListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
             if (!isClosedForSend) {
-                offer(SensorState.SensorData(event))
+                trySend(SensorState.SensorData(event))
             }
         }
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
             if (!isClosedForSend) {
-                offer(SensorState.SensorAccuracy(sensor, accuracy))
+                trySend(SensorState.SensorAccuracy(sensor, accuracy))
             }
         }
     }

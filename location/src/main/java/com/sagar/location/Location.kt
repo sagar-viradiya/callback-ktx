@@ -48,7 +48,7 @@ fun FusedLocationProviderClient.locationFlow(
         override fun onLocationResult(locationResult: LocationResult) {
             locationResult.locations.forEach { location ->
                 if (!isClosedForSend) {
-                    offer(location)
+                    trySend(location)
                 }
             }
         }
