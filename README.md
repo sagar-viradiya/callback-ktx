@@ -3,9 +3,11 @@ Extension functions over Android's callback-based APIs which allows writing them
 
 Currently covers following APIs
 
-- View
 - Animation
-- Widget(TextView)
+- Location
+- RecyclerView
 - Sensor
+- View
+- Widget(TextView)
 
 > This repo is not ready yet for contribution. However we are open to take suggestion on any API that you would like to see here through issue.
