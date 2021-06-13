@@ -143,3 +143,48 @@ viewLifecycleOwner.lifecycleScope.launch {
   // Do things after global layout state or the visibility of views within the view tree changes
 }
 ```
+
+Await till view is next laid out. The extension takes care of removing the listener internally.
+
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+  view.awaitDoOnNextLayout()
+  // Do things after view laid out
+}
+```
+
+Await view's layout. If a view is already laid out it will resume coroutine immediately otherwise suspends till the next view layout. The extension takes care of removing the listener internally.
+
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+  view.awaitDoOnLayout()
+  // Do things after view laid out
+}
+```
+
+Await till view attaches to the window. The extension takes care of removing the listener internally.
+
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+  view.awaitOnAttach()
+  // Do things once view is attached to window
+}
+```
+
+Await till the view detaches from the window. The extension takes care of removing the listener internally.
+
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+  view.awaitOnDetach()
+  // Do things once view is detach from window
+}
+```
+
+Await till the view tree is about to be drawn. The extension takes care of removing the listener internally.
+
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+  view.awaitPreDraw()
+  // Do things before view tree draw
+}
+```
