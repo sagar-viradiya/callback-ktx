@@ -20,6 +20,11 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
+/**
+ * Await on last known location.
+ *
+ * @return Last known location.
+ */
 @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
 suspend fun FusedLocationProviderClient.awaitLastLocation() =
     suspendCancellableCoroutine<Location?> { cont ->
@@ -38,6 +43,14 @@ suspend fun FusedLocationProviderClient.awaitLastLocation() =
         }
     }
 
+/**
+ * Observe location changes through flow.
+ *
+ * @param locationRequest [LocationRequest] instance
+ * @param lifecycleOwner [LifecycleOwner] to unregister location update on pause
+ *
+ * @return Flow of location
+ */
 @ExperimentalCoroutinesApi
 @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
 fun FusedLocationProviderClient.locationFlow(
