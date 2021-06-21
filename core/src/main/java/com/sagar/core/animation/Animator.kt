@@ -7,6 +7,9 @@ import androidx.annotation.RequiresApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
+/**
+ * Await on animation start. It will take care of removing listener if coroutine gets cancelled.
+ */
 suspend fun Animator.awaitStart() = suspendCancellableCoroutine<Unit> { cont ->
     val listener = getAnimatorListener(
         onStart = {
@@ -17,6 +20,10 @@ suspend fun Animator.awaitStart() = suspendCancellableCoroutine<Unit> { cont ->
     cont.invokeOnCancellation { removeListener(listener) }
 }
 
+/**
+ * Await on animation pause. It will take care of removing listener if coroutine gets cancelled
+ * or animation gets cancelled.
+ */
 @RequiresApi(Build.VERSION_CODES.KITKAT)
 suspend fun Animator.awaitPause() = suspendCancellableCoroutine<Unit> { cont ->
     val listener = getAnimatorListener(
@@ -34,6 +41,10 @@ suspend fun Animator.awaitPause() = suspendCancellableCoroutine<Unit> { cont ->
     cont.invokeOnCancellation { cancel() }
 }
 
+/**
+ * Await on animation resume. It will take care of removing listener if coroutine gets cancelled
+ * or animation gets cancelled.
+ */
 @RequiresApi(Build.VERSION_CODES.KITKAT)
 suspend fun Animator.awaitResume() = suspendCancellableCoroutine<Unit> { cont ->
     val listener = getAnimatorListener(
@@ -51,6 +62,10 @@ suspend fun Animator.awaitResume() = suspendCancellableCoroutine<Unit> { cont ->
     cont.invokeOnCancellation { cancel() }
 }
 
+/**
+ * Await on animation end. It will take care of removing listener if coroutine gets cancelled
+ * or animation gets cancelled.
+ */
 suspend fun Animator.awaitEnd() = suspendCancellableCoroutine<Unit> { cont ->
     addListener(
         getAnimatorListener(

@@ -7,6 +7,13 @@ import android.view.ViewTreeObserver
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
+/**
+ * Await on runnable post to be executed on view.
+ * This extension will take care of removing listener in case coroutine gets cancelled.
+ *
+ * @return true if the Runnable was successfully placed in to the
+ *         message queue. Returns false on failure.
+ */
 suspend fun View.awaitPost() = suspendCancellableCoroutine<Boolean> { cont ->
 
     val runnable = Runnable { cont.resume(true) }
@@ -20,6 +27,14 @@ suspend fun View.awaitPost() = suspendCancellableCoroutine<Boolean> { cont ->
     }
 }
 
+/**
+ * Await on runnable post to be executed on view after specified [delay].
+ * This extension will take care of removing listener in case coroutine gets cancelled.
+ *
+ * @param delay Delay in milliseconds
+ * @return true if the Runnable was successfully placed in to the
+ *         message queue. Returns false on failure.
+ */
 suspend fun View.awaitPostDelay(delay: Long) = suspendCancellableCoroutine<Boolean> { cont ->
 
     val runnable = Runnable { cont.resume(true) }
@@ -33,6 +48,10 @@ suspend fun View.awaitPostDelay(delay: Long) = suspendCancellableCoroutine<Boole
     }
 }
 
+/**
+ * Await on global layout state or the visibility of views within the view tree changes.
+ * This extension will take care of removing listener in case coroutine gets cancelled.
+ */
 suspend fun View.awaitGlobalLayout() = suspendCancellableCoroutine<Unit> { cont ->
 
     val listener = object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -49,6 +68,12 @@ suspend fun View.awaitGlobalLayout() = suspendCancellableCoroutine<Unit> { cont 
     }
 }
 
+/**
+ * Await till view is next laid out.
+ * This extension will take care of removing listener in case coroutine gets cancelled.
+ *
+ * @return [View] on which this function call happened.
+ */
 suspend fun View.awaitDoOnNextLayout() = suspendCancellableCoroutine<View> { cont ->
     val listener = object : View.OnLayoutChangeListener {
         override fun onLayoutChange(
@@ -72,6 +97,13 @@ suspend fun View.awaitDoOnNextLayout() = suspendCancellableCoroutine<View> { con
     }
 }
 
+/**
+ * Await till view is laid out. If the view has been laid out and it
+ * has not requested a layout, this function would call resume on continuation immediately.
+ * This extension will take care of removing listener in case coroutine gets cancelled.
+ *
+ * @return [View] on which this function call happened.
+ */
 suspend fun View.awaitDoOnLayout(): View {
     val isLaidOut = if (Build.VERSION.SDK_INT >= 19) isLaidOut else width > 0 && height > 0
     return if (isLaidOut && !isLayoutRequested) {
@@ -83,6 +115,13 @@ suspend fun View.awaitDoOnLayout(): View {
     }
 }
 
+/**
+ * Await till view is attached to a window. If the view is already
+ * attached to a window, this function would call resume on continuation immediately.
+ * This extension will take care of removing listener in case coroutine gets cancelled.
+ *
+ * @return [View] on which this function call happened.
+ */
 suspend fun View.awaitOnAttach() = suspendCancellableCoroutine<View> { cont ->
     var listener: View.OnAttachStateChangeListener? = null
     val isAttachToWindow = if (SDK_INT >= 19) isAttachedToWindow else windowToken != null
@@ -107,6 +146,13 @@ suspend fun View.awaitOnAttach() = suspendCancellableCoroutine<View> { cont ->
     }
 }
 
+/**
+ * Await till view is detach from a window. If the view is not
+ * attached to a window, this function would call resume on continuation immediately.
+ * This extension will take care of removing listener in case coroutine gets cancelled.
+ *
+ * @return [View] on which this function call happened.
+ */
 suspend fun View.awaitOnDetach() = suspendCancellableCoroutine<View> { cont ->
     var listener: View.OnAttachStateChangeListener? = null
     val isAttachToWindow = if (SDK_INT >= 19) isAttachedToWindow else windowToken != null
@@ -131,6 +177,10 @@ suspend fun View.awaitOnDetach() = suspendCancellableCoroutine<View> { cont ->
     }
 }
 
+/**
+ * Await till view is about to draw.
+ * This extension will take care of removing listener in case coroutine gets cancelled.
+ */
 suspend fun View.awaitPreDraw() = suspendCancellableCoroutine<Unit> { cont ->
     var viewTreeObserver: ViewTreeObserver = viewTreeObserver
 
