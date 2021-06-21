@@ -8,6 +8,11 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
+/**
+ * Await till the [RecyclerView] scroll becomes idle.
+ * This extension will take care of registering the the [RecyclerView.OnScrollListener].
+ * It will also unregister the listener when the coroutine is cancelled
+ */
 suspend fun RecyclerView.awaitScrollEnd() = suspendCancellableCoroutine<Unit> { continuation ->
     val listener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -21,6 +26,11 @@ suspend fun RecyclerView.awaitScrollEnd() = suspendCancellableCoroutine<Unit> { 
     continuation.invokeOnCancellation { removeOnScrollListener(listener) }
 }
 
+/**
+ * Observe [RecyclerView]'s change in scroll states through flow.
+ * This extension will take care of registering the the [RecyclerView.OnScrollListener].
+ * It will also unregister the listener when the coroutine is cancelled
+ */
 @ExperimentalCoroutinesApi
 fun RecyclerView.awaitStateChangeFlow() = callbackFlow<Int> {
     val listener = object : RecyclerView.OnScrollListener() {
