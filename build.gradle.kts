@@ -1,7 +1,7 @@
 import kotlinx.validation.ApiValidationExtension
 
 plugins {
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.6.0"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version Versions.KOTLIN_BINARY_COMPATIBILITY
 }
 
 buildscript {
