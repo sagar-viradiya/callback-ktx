@@ -1,10 +1,3 @@
-public final class com/sagar/location/BuildConfig {
-	public static final field BUILD_TYPE Ljava/lang/String;
-	public static final field DEBUG Z
-	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
-	public fun <init> ()V
-}
-
 public final class com/sagar/location/LocationKt {
 	public static final fun awaitLastLocation (Lcom/google/android/gms/location/FusedLocationProviderClient;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun locationFlow (Lcom/google/android/gms/location/FusedLocationProviderClient;Lcom/google/android/gms/location/LocationRequest;Landroidx/lifecycle/LifecycleOwner;)Lkotlinx/coroutines/flow/Flow;
