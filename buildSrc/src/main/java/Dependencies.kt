@@ -2,6 +2,7 @@ object Versions {
 
     const val GRADLE_PLUGIN = "4.2.0"
     const val KTLINT_PLUGIN = "10.0.0"
+    const val KOTLIN_BINARY_COMPATIBILITY = "0.6.0"
 
     const val MIN_SDK_VERSION = 16
     const val TARGET_SDK_VERSION = 30

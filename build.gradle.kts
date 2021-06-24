@@ -1,3 +1,9 @@
+import kotlinx.validation.ApiValidationExtension
+
+plugins {
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version Versions.KOTLIN_BINARY_COMPATIBILITY
+}
+
 buildscript {
     repositories {
         google()
@@ -16,6 +22,10 @@ allprojects {
         google()
         mavenCentral()
     }
+}
+
+extensions.configure<ApiValidationExtension>() {
+    ignoredProjects = mutableSetOf("test")
 }
 
 tasks {
