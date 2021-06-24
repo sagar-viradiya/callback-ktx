@@ -30,6 +30,8 @@ suspend fun RecyclerView.awaitScrollEnd() = suspendCancellableCoroutine<Unit> { 
  * Observe [RecyclerView]'s change in scroll states through flow.
  * This extension will take care of registering the the [RecyclerView.OnScrollListener].
  * It will also unregister the listener when the coroutine is cancelled
+ *
+ * @return Flow of [RecyclerView] scroll state
  */
 @ExperimentalCoroutinesApi
 fun RecyclerView.awaitStateChangeFlow() = callbackFlow<Int> {
