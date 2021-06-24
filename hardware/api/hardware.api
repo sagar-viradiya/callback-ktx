@@ -1,0 +1,32 @@
+public final class com/sagar/hardware/SensorKt {
+	public static final fun sensorStateFlow (Landroid/hardware/SensorManager;Landroid/hardware/Sensor;Landroidx/lifecycle/LifecycleOwner;I)Lkotlinx/coroutines/flow/Flow;
+	public static synthetic fun sensorStateFlow$default (Landroid/hardware/SensorManager;Landroid/hardware/Sensor;Landroidx/lifecycle/LifecycleOwner;IILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public abstract class com/sagar/hardware/SensorState {
+}
+
+public final class com/sagar/hardware/SensorState$SensorAccuracy : com/sagar/hardware/SensorState {
+	public fun <init> (Landroid/hardware/Sensor;I)V
+	public final fun component1 ()Landroid/hardware/Sensor;
+	public final fun component2 ()I
+	public final fun copy (Landroid/hardware/Sensor;I)Lcom/sagar/hardware/SensorState$SensorAccuracy;
+	public static synthetic fun copy$default (Lcom/sagar/hardware/SensorState$SensorAccuracy;Landroid/hardware/Sensor;IILjava/lang/Object;)Lcom/sagar/hardware/SensorState$SensorAccuracy;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccuracy ()I
+	public final fun getSensor ()Landroid/hardware/Sensor;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/sagar/hardware/SensorState$SensorData : com/sagar/hardware/SensorState {
+	public fun <init> (Landroid/hardware/SensorEvent;)V
+	public final fun component1 ()Landroid/hardware/SensorEvent;
+	public final fun copy (Landroid/hardware/SensorEvent;)Lcom/sagar/hardware/SensorState$SensorData;
+	public static synthetic fun copy$default (Lcom/sagar/hardware/SensorState$SensorData;Landroid/hardware/SensorEvent;ILjava/lang/Object;)Lcom/sagar/hardware/SensorState$SensorData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSensorEvent ()Landroid/hardware/SensorEvent;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+

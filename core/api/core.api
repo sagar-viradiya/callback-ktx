@@ -1,0 +1,73 @@
+public final class com/sagar/core/animation/AnimatorKt {
+	public static final fun awaitEnd (Landroid/animation/Animator;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun awaitPause (Landroid/animation/Animator;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun awaitResume (Landroid/animation/Animator;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun awaitStart (Landroid/animation/Animator;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/sagar/core/view/ViewKt {
+	public static final fun awaitDoOnLayout (Landroid/view/View;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun awaitDoOnNextLayout (Landroid/view/View;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun awaitGlobalLayout (Landroid/view/View;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun awaitOnAttach (Landroid/view/View;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun awaitOnDetach (Landroid/view/View;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun awaitPost (Landroid/view/View;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun awaitPostDelay (Landroid/view/View;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun awaitPreDraw (Landroid/view/View;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract class com/sagar/core/widget/ChangeDetails {
+}
+
+public final class com/sagar/core/widget/ChangeDetails$AfterChangeDetails : com/sagar/core/widget/ChangeDetails {
+	public fun <init> (Landroid/text/Editable;)V
+	public final fun component1 ()Landroid/text/Editable;
+	public final fun copy (Landroid/text/Editable;)Lcom/sagar/core/widget/ChangeDetails$AfterChangeDetails;
+	public static synthetic fun copy$default (Lcom/sagar/core/widget/ChangeDetails$AfterChangeDetails;Landroid/text/Editable;ILjava/lang/Object;)Lcom/sagar/core/widget/ChangeDetails$AfterChangeDetails;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEditable ()Landroid/text/Editable;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/sagar/core/widget/ChangeDetails$BeforeChangeDetails : com/sagar/core/widget/ChangeDetails {
+	public fun <init> (Ljava/lang/CharSequence;III)V
+	public final fun component1 ()Ljava/lang/CharSequence;
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun copy (Ljava/lang/CharSequence;III)Lcom/sagar/core/widget/ChangeDetails$BeforeChangeDetails;
+	public static synthetic fun copy$default (Lcom/sagar/core/widget/ChangeDetails$BeforeChangeDetails;Ljava/lang/CharSequence;IIIILjava/lang/Object;)Lcom/sagar/core/widget/ChangeDetails$BeforeChangeDetails;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAfter ()I
+	public final fun getCount ()I
+	public final fun getS ()Ljava/lang/CharSequence;
+	public final fun getStart ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/sagar/core/widget/ChangeDetails$OnChangeDetails : com/sagar/core/widget/ChangeDetails {
+	public fun <init> (Ljava/lang/CharSequence;III)V
+	public final fun component1 ()Ljava/lang/CharSequence;
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun copy (Ljava/lang/CharSequence;III)Lcom/sagar/core/widget/ChangeDetails$OnChangeDetails;
+	public static synthetic fun copy$default (Lcom/sagar/core/widget/ChangeDetails$OnChangeDetails;Ljava/lang/CharSequence;IIIILjava/lang/Object;)Lcom/sagar/core/widget/ChangeDetails$OnChangeDetails;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBefore ()I
+	public final fun getCount ()I
+	public final fun getS ()Ljava/lang/CharSequence;
+	public final fun getStart ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/sagar/core/widget/TextViewKt {
+	public static final fun afterTextChangeFlow (Landroid/widget/TextView;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun beforeTextChangeFlow (Landroid/widget/TextView;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun onTextChangeFlow (Landroid/widget/TextView;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun textChangeFlow (Landroid/widget/TextView;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+

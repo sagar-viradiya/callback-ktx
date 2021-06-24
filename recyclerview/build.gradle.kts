@@ -8,6 +8,10 @@ android {
     compileSdkVersion(Versions.COMPILE_SDK_VERSION)
     buildToolsVersion = "30.0.3"
 
+    libraryVariants.all {
+        generateBuildConfigProvider?.configure { enabled = false }
+    }
+
     defaultConfig {
         minSdkVersion(Versions.MIN_SDK_VERSION)
         targetSdkVersion(Versions.TARGET_SDK_VERSION)
