@@ -38,7 +38,6 @@ android {
 }
 
 dependencies {
-    implementation(Libs.KOTLIN_STD)
     implementation(Libs.RECYCLER_VIEW)
     implementation(Libs.COROUTINES)
     androidTestImplementation(Libs.COROUTINES_ANDROID)
