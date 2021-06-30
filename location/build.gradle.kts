@@ -38,7 +38,6 @@ android {
 }
 
 dependencies {
-    implementation(Libs.KOTLIN_STD)
     implementation(Libs.COROUTINES)
     implementation(Libs.LIFECYCLE_RUNTIME_KTX) {
         exclude("org.jetbrains.kotlinx", "kotlinx-coroutines-android")

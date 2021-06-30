@@ -39,7 +39,6 @@ android {
 }
 
 dependencies {
-    implementation(Libs.KOTLIN_STD)
     implementation(Libs.COROUTINES)
     implementation(Libs.ANNOTATION)
     androidTestImplementation(Libs.COROUTINES_ANDROID)
