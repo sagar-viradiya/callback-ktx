@@ -37,6 +37,10 @@ android {
         exclude("META-INF/LGPL2.1")
         exclude("META-INF/DEPENDENCIES")
     }
+
+    extensions.getByType<com.vanniktech.maven.publish.MavenPublishPluginExtension>().apply {
+        sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
+    }
 }
 
 dependencies {
