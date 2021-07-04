@@ -86,7 +86,7 @@ jobs:
     name: Deploy snapshot
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
     needs: [ check, instrumentation-tests, instrumentation-tests-with-google-play-services ]
     steps:
       - uses: actions/checkout@v2
