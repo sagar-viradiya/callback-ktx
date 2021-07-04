@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("org.jlleitschuh.gradle.ktlint")
+    id("com.vanniktech.maven.publish")
 }
 
 android {
@@ -35,6 +36,10 @@ android {
         exclude("META-INF/AL2.0")
         exclude("META-INF/LGPL2.1")
         exclude("META-INF/DEPENDENCIES")
+    }
+
+    extensions.getByType<com.vanniktech.maven.publish.MavenPublishPluginExtension>().apply {
+        sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
     }
 }
 

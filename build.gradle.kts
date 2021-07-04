@@ -14,6 +14,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:${Versions.GRADLE_PLUGIN}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}")
         classpath("org.jlleitschuh.gradle:ktlint-gradle:${Versions.KTLINT_PLUGIN}")
+        classpath("com.vanniktech:gradle-maven-publish-plugin:${Versions.MAVEN_PUBLISH_PLUGIN}")
     }
 }
 
