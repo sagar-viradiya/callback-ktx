@@ -14,11 +14,11 @@ jobs:
       - uses: gradle/wrapper-validation-action@v1
       - uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: 11
       - uses: actions/cache@v2
         with:
           path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/**.gradle.kts', '**/gradle/wrapper/gradle-wrapper.properties') }}
 
       - name: Check style
         run: ./gradlew ktlintCheck
@@ -41,11 +41,11 @@ jobs:
       - uses: gradle/wrapper-validation-action@v1
       - uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: 11
       - uses: actions/cache@v2
         with:
           path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/**.gradle.kts') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/**.gradle.kts', '**/gradle/wrapper/gradle-wrapper.properties') }}
 
       - name: Instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -68,11 +68,11 @@ jobs:
       - uses: gradle/wrapper-validation-action@v1
       - uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: 11
       - uses: actions/cache@v2
         with:
           path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/**.gradle.kts') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/**.gradle.kts', '**/gradle/wrapper/gradle-wrapper.properties') }}
 
       - name: Instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -81,3 +81,26 @@ jobs:
           target: ${{ matrix.target }}
           arch: x86
           script: ./gradlew connectedDebugAndroidTest
+
+  deploy-snapshot:
+    name: Deploy snapshot
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.ref == 'refs/heads/main'
+    needs: [ check, instrumentation-tests, instrumentation-tests-with-google-play-services ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/**.gradle.kts', '**/gradle/wrapper/gradle-wrapper.properties') }}
+
+      - name: Deploy Snapshot
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+        run: ./publish_remote.sh
