@@ -10,17 +10,6 @@ android {
     defaultConfig {
         minSdkVersion(Versions.MIN_SDK_VERSION)
         targetSdkVersion(Versions.TARGET_SDK_VERSION)
-        versionCode(1)
-        versionName = "1.0"
-
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
     }
 }
 
