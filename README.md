@@ -1,4 +1,4 @@
-# callback-ktx&nbsp;&nbsp;   🚧 &nbsp;&nbsp;  Work in progress &nbsp;&nbsp;🚧 &nbsp;&nbsp;  👷‍♀️⛏👷🔧️👷🔧
+# callback-ktx
 Extension functions over Android's callback-based APIs which allows writing them in a sequential way within coroutines or observe multiple callbacks through Kotlin flow.
 
 Currently covers following APIs
@@ -10,7 +10,64 @@ Currently covers following APIs
 - View
 - Widget(TextView)
 
-> This repo is not ready yet for contribution. However we are open to take suggestion on any API that you would like to see here through issue.
+## Including in your project
+
+Callback extensions are divided across different modules based on the category they fall under. For example, all framework APIs would fall under the core module. Anything not related to the framework is in its separate module. So depending on your requirement you can depend on a specific module available on `mavenCentral()`
+
+To include core extension add the following in your `build.gradle`
+
+```groovy
+implementation("io.github.sagar-viradiya:callback-core-ktx:1.0.0")
+```
+
+Similarly, you can check individual module's README to know how to include those dependencies.
+
+## Examples
+
+Below are a few examples of the extensions and it's usage in coroutine.
+
+Await on animation start (Core extension)
+
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+  animator.awaitStart()
+  // Your code goes here after animation start
+}
+```
+
+Await view's layout. If a view is already laid out it will resume coroutine immediately otherwise suspends till the next view layout. The extension takes care of removing the listener internally.
+
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+  view.awaitDoOnLayout()
+  // Do things after view laid out
+}
+```
+
+Await on the last location.
+
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+  val location = fusedLocationProviderClient.awaitLastLocation()    // Suspend coroutine
+  // Use last location
+}
+```
+
+Observe location changes. The extension takes care of registering and unregistering location update callback based on the state of the lifecycle owner internally.
+
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+  fusedLocationProviderClient.locationFlow(locationRequest, lifecycleOwner).collect { location ->
+    // Consume location
+  }
+}
+```
+
+Please check the individual module's README for more details.
+
+## Contributing
+
+Found APIs that are not covered and want to contribute new extensions? Found an issue or have any suggestions for enhancements? Head over to [Contribution guidelines](CONTRIBUTING.md) to know more about contributing to this library.
 
 # License
 
