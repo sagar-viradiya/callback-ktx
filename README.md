@@ -1,7 +1,7 @@
 # callback-ktx
 ![CI](https://github.com/sagar-viradiya/callback-ktx/actions/workflows/ci.yml/badge.svg)
 
-Extension functions over Android's callback-based APIs which allows writing them in a sequential way within coroutines or observe multiple callbacks through Kotlin flow.
+A lightweight Android library that wraps Android's callback-based APIs into suspending extension functions which allow writing them in a sequential way within coroutines or observe multiple callbacks through Kotlin flow. This library is inspired by Chris Banes blog on [suspending over view](https://chris.banes.dev/suspending-views/).
 
 Currently covers following APIs
 
