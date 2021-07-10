@@ -1,5 +1,17 @@
 # RecyclerView extensions
 
+Recyclerview extensions allows you to either await on scroll to end or observe scroll states through flow.
+
+## Including in your project
+
+RecyclerView extensions are available on `mavenCentral()`
+
+```groovy
+implementation("io.github.sagar-viradiya:callback-recyclerview-ktx:1.0.0")
+```
+
+## Extensions
+
 Await on RecyclerView scroll to end
 
 ```kotlin

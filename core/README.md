@@ -6,6 +6,14 @@ Core contains extensions on the following framework APIs
 - TextView
 - View
 
+## Including in your project
+
+Core extensions are available on `mavenCentral()`
+
+```groovy
+implementation("io.github.sagar-viradiya:callback-core-ktx:1.0.0")
+```
+
 ## Animator
 
 Await on animation start

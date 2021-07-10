@@ -1,4 +1,6 @@
 # callback-ktx
+![CI](https://github.com/sagar-viradiya/callback-ktx/actions/workflows/ci.yml/badge.svg)
+
 Extension functions over Android's callback-based APIs which allows writing them in a sequential way within coroutines or observe multiple callbacks through Kotlin flow.
 
 Currently covers following APIs
